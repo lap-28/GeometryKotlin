@@ -16,6 +16,20 @@ class Point constructor(val x: Double, val y: Double) {
     fun between(other: Point): Double {
         return sqrt((x - other.x).pow(2) + (y - other.y).pow(2))
     }
+
+    companion object {
+        fun collinear(vararg points: Point): Boolean {
+            for (idx in 2..<points.size) {
+                val last = points[idx-1] - points[idx-2]
+                val now = points[idx] - points[idx-1]
+                println("%x: ${(now.x - last.x) % 1}")
+                println("%y: ${(now.y - last.y) % 1}")
+                if ((now.x % last.x) % 1.0 != 0.0) return false
+                if ((now.y % last.y) % 1.0 != 0.0) return false
+            }
+            return true
+        }
+    }
 }
 
 interface Shape2D {
@@ -43,4 +57,7 @@ fun main() {
     val triangle = Triangle(arrayOf(Point(-3.0, -1.0), Point(2.0, 3.0), Point(2.0, -1.0)))
     println(triangle.perimeter())
     println(triangle.area())
+
+    val points = arrayOf<Point>(Point(1.0, 0.0), Point(3.0, 2.0), Point(6.0, 5.0), Point(10.0, 9.0))
+    println(Point.collinear(*points))
 }
